@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>I'm sorry Adi</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fde8ec;
+    --ink: #3b1424;
+    --rose: #e5446d;
+    --rose-ink: #ffffff;
+    --ghost: #f6c9d3;
+    --paper: #fffaf6;
+    --paper-ink: #4a2230;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1f0d1a; --ink: #ffe3ea; --rose: #ff6b8f; --rose-ink: #2a0b17;
+      --ghost: #3d1b2d; --paper: #2b1422; --paper-ink: #ffe3ea;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1f0d1a; --ink: #ffe3ea; --rose: #ff6b8f; --rose-ink: #2a0b17;
+    --ghost: #3d1b2d; --paper: #2b1422; --paper-ink: #ffe3ea;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html, body { min-height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Nunito", system-ui, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px 16px;
+  }
+  main { width: 100%; max-width: 720px; text-align: center; }
+  h1 {
+    font-family: "Caveat", cursive;
+    font-size: clamp(3.2rem, 14vw, 6rem);
+    line-height: 1; margin: 0 0 8px; font-weight: 700;
+  }
+  .hint { min-height: 1.6em; margin: 0 0 28px; font-weight: 600; opacity: .8; }
+  .choices { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  button {
+    font-family: inherit; font-weight: 800; border: 0; cursor: pointer;
+    border-radius: 999px; max-width: 100%;
+    transition: font-size .25s ease, padding .25s ease, transform .1s ease;
+  }
+  button:active { transform: scale(.97); }
+  button:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  #accept { background: var(--rose); color: var(--rose-ink); font-size: 1.1rem; padding: .8em 1.6em; }
+  #decline { background: var(--ghost); color: var(--ink); font-size: 1rem; padding: .7em 1.4em; }
+  #letterView { display: none; }
+  .paper {
+    background: var(--paper); color: var(--paper-ink);
+    padding: clamp(24px, 6vw, 48px); border-radius: 6px; text-align: left;
+    box-shadow: 0 10px 40px rgba(60, 10, 30, .25);
+    transform: rotate(-.6deg);
+    font-family: "Caveat", cursive; font-size: clamp(1.4rem, 4.6vw, 1.9rem); line-height: 1.45;
+  }
+  .paper p { margin: 0 0 1em; }
+  .paper .love { margin-bottom: 0; }
+  .paper .follow-up {
+    margin: 1.25em 0 0;
+    padding: .65em .8em;
+    border: 1px solid var(--ghost);
+    border-left: 4px solid var(--rose);
+    border-radius: 8px;
+    background: var(--bg);
+  }
+  .heart { display: inline-block; color: var(--rose); }
+  .reveal { animation: rise .8s ease both; }
+  .reveal .heart { animation: beat 1.2s ease-in-out infinite; }
+  @keyframes rise { from { opacity: 0; transform: translateY(24px) rotate(-.6deg); } to { opacity: 1; } }
+  @keyframes beat { 50% { transform: scale(1.3); } }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal .heart { animation: none; }
+    button { transition: none; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <section id="askView">
+    <h1>I'm sorry Adi</h1>
+    <p class="hint" id="hint">Will you forgive me?</p>
+    <div class="choices">
+      <button id="accept" type="button">I ACCEPT</button>
+      <button id="decline" type="button">I don't accept your sorry</button>
+    </div>
+  </section>
+
+  <section id="letterView" aria-live="polite">
+    <div class="paper" id="paper">
+      <p>I sincerely apologize for the misunderstanding between us. I never intended to hurt your feelings or cause any problems. Maybe we misunderstood each other, and things didn't go the way we expected. I hope we can talk things through, clear up the confusion, and understand each other better. I'm sorry for what happened, and I hope we can move forward with no hard feelings.</p>
+      <p class="love">I love you so much, no matter what happens. You will always have a special place in my heart, and I hope we can overcome this misunderstanding together. ILOVEYOU MY ADI <span class="heart">❤️</span></p>
+      <p class="follow-up">If you’d like more clarity and are willing to set ego aside, please message me directly on Facebook.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+  var accept = document.getElementById("accept");
+  var decline = document.getElementById("decline");
+  var hint = document.getElementById("hint");
+  var clicks = 0;
+  var messages = [
+    "Will you forgive me?",
+    "Are you sure? Look at that button…",
+    "It’s getting bigger, you know.",
+    "Please? I really am sorry.",
+    "The big button is not going away.",
+    "You can’t say no to this button.",
+    "Okay, now it’s just unfair.",
+    "Just press the big one. ❤️"
+  ];
+
+  decline.addEventListener("click", function () {
+    clicks++;
+    var n = Math.min(clicks, 16);
+    accept.style.fontSize = (1.1 + n * 0.18) + "rem";
+    accept.style.padding = (0.8 + n * 0.04) + "em " + (1.6 + n * 0.05) + "em";
+    decline.style.fontSize = Math.max(0.7, 1 - n * 0.02) + "rem";
+    hint.textContent = messages[Math.min(clicks, messages.length - 1)];
+  });
+
+  accept.addEventListener("click", function () {
+    document.getElementById("askView").style.display = "none";
+    var view = document.getElementById("letterView");
+    view.style.display = "block";
+    document.getElementById("paper").classList.add("reveal");
+    window.scrollTo(0, 0);
+  });
+</script>
+</body>
+</html>
